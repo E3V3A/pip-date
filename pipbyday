@@ -1,0 +1,51 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+# Prints when python packages were installed
+
+from __future__ import print_function
+from datetime import datetime
+import os, platform
+import pkg_resources as p
+from time import strftime
+
+if __name__ == "__main__":
+    packages = []
+
+    if platform.architecture()[1] == "WindowsPE":
+        isWinFS = True
+        print("\nUsing ctime for WindowsPE")
+    else:
+        isWinFS = False
+        print("\nUsing mtime for Linux FS")
+
+    # The package: "name version"
+    for package in p.working_set:
+        pkg_nam_ver = str(package)
+
+        try:
+            module_dir = next(package._get_metadata('top_level.txt'))
+            pkg_loc = os.path.join(package.location, module_dir)
+            os.stat(pkg_loc)
+
+        except (StopIteration, OSError):
+            try:
+                pkg_loc = os.path.join(package.location, package.key)
+                os.stat(pkg_loc)
+            except:
+                pkg_loc = package.location
+
+        # aTime = access time ...
+        # mtime = modification time
+        # ctime = creation time BUT is the "real" last modification time on windows.
+        if isWinFS:
+            mtime = os.path.getctime(pkg_loc)   # modification time on Windows
+        else:
+            mtime = os.path.getmtime(pkg_loc)   # modification time on Linux
+        
+        mtime = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d  %H:%M:%S")
+        packages.append([mtime, pkg_nam_ver])
+
+    for mtime, pkg_nam_ver in sorted(packages):
+        print("{:22} : {:<30}".format(mtime.ljust(22,' '), pkg_nam_ver))
+
+print("\nDone!")

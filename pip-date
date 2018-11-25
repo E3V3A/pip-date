@@ -1,0 +1,243 @@
+#!/usr/bin/env python3
+# pipdate - Show the install date of all pip-installed python3 packages
+# -*- coding: utf-8 -*-
+#----------------------------------------------------------------------
+#  ToDo:
+#   [ ] better cehck for cTime when using multiple versions:
+#       usually the first version should be install date...
+#   [x] Add egg paths: -py3.6.egg-info
+#   [x] if you are generating a filename from this value you should combine it 
+#       with a call to to_filename() so all dashes ("-"") are replaced by underscores ("_"). See to_filename().
+#   [/] fix rounding of floats in [a/c/m]Time 
+#   [ ] If using Windows FS, then use cTime, if using *nix FS, use mTime ["platform.architecture()"]
+#
+#   [ ] Add CLI options:
+#       - [ ] '-d'          : Enable extra debug info
+#       - [ ] '-e'          : Show "env" column to display 'virtualenv' name
+#       - [ ] '-n'          : Disable colors
+#       - [ ] '-h'          : THIS help/usage message
+#       - [ ] '-v'          : THIS program version
+#       - [ ] '-t <days>'   : To highlight packages installed <days> ago
+#
+# References:
+#   [1] 
+#   [2] 
+#----------------------------------------------------------------------
+import re, os, sys, subprocess
+import site, pkg_resources
+from datetime import datetime
+from datetime import timedelta
+from time import strftime
+
+__version__ = '1.0.1'
+#version = '1.0.1'
+
+#------------------------------------------------
+# Text Coloring
+#------------------------------------------------
+# Usage:  print (yellow("This is yellow"))
+def color(text, color_code):
+    if sys.platform == "win32" and "xterm" not in os.getenv("TERM"):    # [xterm, xterm-color, xterm-256color]
+        return text
+    # for brighter colors, use "1;" in front of "color_code"
+    bright = '' # '1;'
+    return '\x1b[%s%sm%s\x1b[0m' % (bright, color_code, text)
+
+def red(text):    return color(text, 31);
+def green(text):  return color(text, 32);           # '1;49;32'
+def bgreen(text):  return color(text, '1;49;32');   # bright green
+def orange(text): return color(text, '0;49;91');    # 31 - Hard to look good! (or remains "red")
+def yellow(text): return color(text, 33)            # 
+def blue(text):   return color(text, '1;49;34')     # bright blue
+def purple(text): return color(text, 35)            # 
+def cyan(text):   return color(text, '0;49;96')     # 36
+def white(text):  return color(text, '0;49;97');    # bright white
+
+#------------------------------------------------
+# Print Color Legend
+#------------------------------------------------
+cc = u'\u2585' # Unicode Character for a "box" (U+2585)
+def print_legend(): 
+    print( "  {} = ERROR (preventing package processing)".format(red(cc)) )
+    print( "  {} = Bad / Non-Standard Installation Path".format(purple(cc)) )
+    print( "  {} = Possibly Multiple installations (differing file times)".format(yellow(cc)) )
+    print( "  {} = Recently Changed / Installed (in last 7 days)".format(cyan(cc)) )
+    print( "  {} = Non-PEM-compliant Version string (PEM-0440) | ~/.local install".format(green(cc)) )
+    print( "  {} = A 'setuptools' dependency package".format(blue(cc)) )
+    #print( "  {} = ERROR".format(white(cc)) )
+
+#------------------------------------------------
+# Helper Functions
+#------------------------------------------------
+def safe_name(name):
+    # Replace runs of non-alphanumeric characters with a single '-'.
+    return re.sub('[^A-Za-z0-9]+', '-', name)
+
+def safe_version(version):
+    # Convert an arbitrary string to a standard version string
+    version = version.replace(' ', '.')
+    return re.sub('[^A-Za-z0-9.]+', '-', version)
+
+def to_filename(name):
+    # Replace any '-' characters with '_'.
+    return name.replace('-', '_')
+
+def test_loc(loc):
+    if '.local' in loc:
+        ploc = bgreen('usr')        # user
+    elif 'site-packages' in loc: 
+        ploc = 'sys'                # system
+    else: 
+        ploc = red('???')
+    return ploc
+
+def pre2txt(pre):
+    # Distribution "precedence" constants:  (../pkg_resources/__init__.py)
+    # EGG_DIST, BINARY_DIST, SOURCE_DIST, CHECKOUT_DIST, DEVELOP_DIST  :  [3,2,1,0,-1]
+    # { 'egg': 3, 'bin': 2, 'src': 1, 'chk': 0, 'dev': -1 }
+    d = ['chk', 'src', 'bin', 'egg', 'dev']
+    return d[pre]
+
+def is_canonical(version):
+    # Check PEM-0440 Version string compliance:
+    # https://www.python.org/dev/peps/pep-0440/
+    return re.match(r'^([1-9]\d*!)?(0|[1-9]\d*)(\.(0|[1-9]\d*))*((a|b|rc)(0|[1-9]\d*))?(\.post(0|[1-9]\d*))?(\.dev(0|[1-9]\d*))?$', version) is not None
+
+
+def pkgcol(pkgarr):
+    # The <package_name> color require special treatment, because 
+    # of sorting on key position and getting ljust space.
+    # https://packaging.python.org/key_projects/
+    cygset  = ['setuptools', 'appdirs', 'packaging', 'pyparsing', 'six' ]   # Cygwin python3-setuptools dependency packages
+    #cygset += ['wheel', 'virtualenv', 'pipenv', 'pip']                      # ...some additional essentials
+    #cygset += ['scikit-build', 'distlib']                                   # ...some additional essentials
+
+    line = ''
+    for i in range(len(pkgarr)):
+        line = pkgarr[i]
+        for pname in cygset:
+            # ToDo: only replace if in 1st word
+            if pname in line:
+                #pkgarr[i] = re.sub(r'^[a-zA-Z0-9_\-]+', blue(pname), line, 1)
+                rx = line.find(pname)
+                if rx < 20 and rx != '-1':
+                    pkgarr[i] = line.replace(pname, blue(pname), 1)
+                    break
+    return pkgarr
+
+#------------------------------------------------
+# MAIN
+#------------------------------------------------
+print()
+debug    = 0
+pcnt     = 0
+pkg      = []
+site_loc = site.getsitepackages()[0]
+
+for d in pkg_resources.working_set :
+    try: 
+        pkg_name = d.project_name                                                               #
+        pkg_ver  = d.version                                                                    #
+        pkg_loc  = d.location                                                                   # 
+        pkg_typ  = 'n/a' #"wheel" if d.location.is_wheel else "sdist"                           # 'Type'
+        pkg_pre  = pre2txt(d.precedence) if d.precedence != -1 else ''                          # 'Prec'
+        pkg_ins  = d.get_metadata('INSTALLER').strip() if d.has_metadata('INSTALLER') else ''   # get_metadata_lines() '???'
+        pkg_whl  = d.get_metadata('WHEEL').strip() if d.has_metadata('WHEEL') else ''           # get_metadata_lines() '???'
+
+    except ValueError as e: 
+        print( red("ERROR:") + " %s" % e) 
+
+    if debug :
+        print("pkg_loc:  %s: %s  (%s)" % (pkg_name.ljust(20,' '), pkg_loc, pkg_pre) )
+        print("pkg_typ:  %s" % pkg_ins)
+        print("pkg_whl:  %s" % pkg_whl)
+        print("pkg_ins:  %s" % pkg_ins)
+
+    #----------------------------------
+    # Testing Package Locations
+    #----------------------------------
+    # A workaround for packages with bad Location:
+    if ".egg" in pkg_loc: 
+        print( purple("Found Bad Path Location for:") + " %s" % white(pkg_name))
+        print("Package Location set to:     %s" % (pkg_loc));
+        pkg_loc = site_loc
+
+    # /usr/lib/python3.6/site-packages/pyflightdata-0.5.6.dist-info/
+    # Wheel uses .dist-info directories; egg uses .egg-info. 
+    pkg_path = pkg_loc + "/" + to_filename(pkg_name) + "-" + to_filename(pkg_ver)
+    pkg_loc1 = pkg_path + ".dist-info"
+    pkg_loc2 = pkg_path + "-py3.6.egg-info"
+    pkg_loc3 = pkg_path + "-py3.6.egg"
+    # any others?
+
+    if os.path.exists(pkg_loc1):
+        tsc = os.path.getctime(pkg_loc1)
+        tsm = os.path.getmtime(pkg_loc1)
+    elif os.path.exists(pkg_loc2):
+        tsc = os.path.getctime(pkg_loc2)
+        tsm = os.path.getmtime(pkg_loc2)
+    elif os.path.exists(pkg_loc3):
+        tsc = os.path.getctime(pkg_loc3)
+        tsm = os.path.getmtime(pkg_loc3)
+    else:
+        print(red("Skipping Bad Path of:") + " %s: \t%s" % (pkg_name, pkg_path))  # to_filename(pkg_name))
+        continue
+    
+    #----------------------------------
+    # Processing Time Stamps
+    #----------------------------------
+    pkg_ctime = datetime.fromtimestamp(tsc).strftime("%Y-%m-%d  %H:%M:%S").strip()
+    pkg_mtime = datetime.fromtimestamp(tsm).strftime("%Y-%m-%d  %H:%M:%S").strip()
+
+    # NOTE:  If TS differs by < 1 second, it will not show. To do so, test:  tsc == tsm
+    if pkg_ctime != pkg_mtime: 
+        pkg_mtime = yellow(pkg_mtime)
+    else: 
+        pkg_mtime = ''
+
+    ctNow = datetime.now()                  # Time "now"
+    ct7dy = ctNow - timedelta(days = 7)     # Time 1 week ago
+    pctim = datetime.fromtimestamp(tsc)     # Time file cTime Time Stamp
+    if pctim > ct7dy :
+        pkg_ctime = cyan(pkg_ctime)         # cyan
+    #----------------------------------
+
+    if pkg_pre: 
+        pkg_pre = yellow(pkg_pre) + " "     # 
+
+    if not is_canonical(pkg_ver): 
+        pkg_ver = green(pkg_ver) + " "*3    # green + ugly color-code-length hack when using colors...
+
+    # ugly test here... must be a better way
+    if 'bdist_wheel' in pkg_whl:
+        pkg_typ = 'wheel'
+    else: 
+        pkg_typ = white('sdist')
+
+    pkg_loc = test_loc(pkg_loc)
+
+    pcnt += 1
+    ##pkg  += ["{:20}   {:<20}   {:<20}   {:<16}   {:<6}   {:3}".format(pkg_name.ljust(20,' '),pkg_ctime,pkg_mtime,pkg_ver,pkg_ins,pkg_pre) ]
+    #pkg  += ["{:20}   {:<20}   {:<20}   {:<16}   {:6}   {:3}   {:<5}".format(pkg_name.ljust(20,' '),pkg_ctime,pkg_mtime,pkg_ver,pkg_ins,pkg_pre,pkg_typ) ]
+    pkg  += ["{:20}   {:<20}   {:<20}   {:<16}   {:6}   {:<4}   {:5}   {:3}".format(pkg_name.ljust(20,' '),pkg_ctime,pkg_mtime,pkg_ver,pkg_ins,pkg_pre,pkg_typ,pkg_loc) ]
+
+##header_str = "{:20}   {:20}   {:20}   {:16}   {:6}   {:3}".format('Package'.ljust(20, ' '), 'Installed (cTime)', 'Modified (mTime)', 'Version', 'Type', 'Prec')
+#header_str = "{:20}   {:20}   {:20}   {:16}   {:6}   {:3}   {:5}".format('Package'.ljust(20, ' '), 'Installed (cTime)', 'Modified (mTime)', 'Version', 'Inst', 'Prec', 'Type')
+header_str = "{:20}   {:20}   {:20}   {:16}   {:6}   {:4}   {:5}   {:3}".format('Package'.ljust(20, ' '), 'Installed (cTime)', 'Modified (mTime)', 'Version', 'Inst', 'Prec', 'Type ', 'Loc')
+hlen = len(header_str)
+
+print('\n' + header_str)
+
+print("-"*hlen)
+spkg = sorted(pkg, key=str.lower)
+spkg = pkgcol(spkg)     # set color to pkg_name
+print('\n'.join(spkg))
+
+print("-"*hlen)
+print_legend()
+
+print("-"*hlen)
+print("Found %d packages." % pcnt)
+print("\nDone!")
+
+sys.exit(0)
