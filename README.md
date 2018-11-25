@@ -118,7 +118,9 @@ pip-date      # When it's in your PATH
 
 Example Output:
 
-<TBA>
+![Full](./docs/screen1.png)
+
+![Full](./docs/screen2.png)
 
 ---
 
@@ -172,8 +174,6 @@ pip install -i https://test.pypi.org/simple/ pip-date
 # If all ok, then delete from test.pypi.org and re-upload to live PyPI
 twine upload -r pypi dist/*
 ```
-
-
 
 ---
 
