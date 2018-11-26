@@ -1,17 +1,35 @@
 ### pip-date -- Date your pip packages!
 
-[![PyPI version](https://badge.fury.io/py/pip-date.svg)](https://badge.fury.io/py/pip-date)
-[![pypi supported versions](https://img.shields.io/pypi/pyversions/pip-date.svg)](https://pypi.python.org/pypi/pip-date)
-[![Maintenance](https://img.shields.io/badge/Maintained%3F-yes-green.svg)](https://GitHub.com/E3V3A/pip-date/graphs/commit-activity)
-[![GitHub last commit](https://img.shields.io/github/last-commit/E3V3A/pip-date.svg)](https://github.com/E3V3A/pip-date)
-[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/E3V3A/pip-date.svg)](http://isitmaintained.com//project/E3V3A/pip-date "Average time to resolve an issue")
+[![PyPI version][1]][2]
+[![pypi supported versions][3]][4]
+[![Maintenance][5]][6]
+[![GitHub last commit][7]][8]
+[![Average time to resolve an issue][9]][10]
 
+[1]: https://badge.fury.io/py/pip-date.svg
+[2]: https://badge.fury.io/py/pip-date
+[3]: https://img.shields.io/pypi/pyversions/pip-date.svg
+[4]: https://pypi.python.org/pypi/pip-date
+[5]: https://img.shields.io/badge/Maintained%3F-yes-green.svg
+[6]: https://GitHub.com/E3V3A/pip-date/graphs/commit-activity
+[7]: https://img.shields.io/github/last-commit/E3V3A/pip-date.svg
+[8]: https://github.com/E3V3A/pip-date/commits/master "Last commits to Master branch"
+[9]: http://isitmaintained.com/badge/resolution/E3V3A/pip-date.svg
+[10]: http://isitmaintained.com//project/E3V3A/pip-date "Average time to resolve an issue"
 
 A simple *Python3* CLI tool to show the installation or modification times of all your pip packages.
 
 | STATUS: | Version | Date | Maintained? |
 |:------- |:------- |:---- |:----------- |
 | Working | `1.0.1` | 2018-11-26 | YES |
+
+---
+
+Example Output:
+
+![Full](./docs/screen1.png)
+
+![Full](./docs/screen2.png)
 
 ---
 
@@ -107,7 +125,6 @@ cd pip-date
 pip install pip-date --user
 ```
 
----
 
 ### How to Run
 
@@ -116,15 +133,9 @@ pip-date      # When it's in your PATH
 ./pip-date    # When it's not in your PATH
 ```
 
-Example Output:
-
-![Full](./docs/screen1.png)
-
-![Full](./docs/screen2.png)
-
 ---
 
-#### DYI PyPI Packaging
+### DYI PyPI Packaging
 
 For your convenience, I will show you how to make a **simple** *python-only-script* pip-installable package like this one. 
 Just follow these steps. (Don't bother reading elsewhere, because 99.9% of Google's results are already outdated!)
@@ -147,15 +158,13 @@ Then Setup and edit:
 You need to edit the following files: 
 
 ```bash
-.
-+-- __init__.py
-+-- CHANGES.txt
-+-- LICENSE.txt
-+-- pip-date 	 # Your Python Script
-+-- README.md
-+-- setup.cfg
-+-- setup.py
-
+__init__.py   # Can be empty
+CHANGES.txt   # Can be left out
+LICENSE.txt
+MyPyScript 	  # Your Python Script
+README.md
+setup.cfg     # Python2 or 3 or both?
+setup.py      # ALL your package details
 ```
 
 
@@ -177,8 +186,7 @@ twine upload -r pypi dist/*
 
 ---
 
-#### Reference:
-
+### References:
 
 **Time Stamps**
 
@@ -194,7 +202,11 @@ that it has a Windows FS that need *ctime*, and that anything else should use *m
 
 Then we use: `os.path.getctime(pkg_loc)` to get the file time stamp.
 
-For all the gory details, see: [here](https://linuxhandbook.com/file-timestamps/), [here](https://www.unixtutorial.org/atime-ctime-mtime-in-unix-filesystems/) and [here](https://en.wikipedia.org/wiki/MAC_times). 
+For all the gory details, see: [here](https://linuxhandbook.com/file-timestamps/), 
+[here](https://www.unixtutorial.org/atime-ctime-mtime-in-unix-filesystems/) and 
+[here](https://en.wikipedia.org/wiki/MAC_times). 
+
+---
 
 #### Glossary:
 
@@ -240,6 +252,8 @@ None
 - [ ] improve highlighting of special package dependencies, such as [these](https://packaging.python.org/key_projects/).  
       (e.g. Current implementation would for 'pip' also highlight any package with "pip" in it.)
 
+See issues marked [ToDo](https://github.com/E3V3A/pip-date/issues?q=is%3Aopen+is%3Aissue+label%3AToDo).
+
 #### Contribution
 
 Feel free to post issues and PR's related to this tool.  
@@ -248,19 +262,22 @@ Feel free to fork, break, fix and contribute. Enjoy!
 
 #### Additional Badges
 
-[![build status][10]][11] [![Codacy Badge][12]][13] [![codecov][14]][15]
+[![build status][11]][12] [![Codacy Badge][13]][14] [![codecov][15]][16]
 
 ---
 
 #### License
 
-[![GitHub license](https://img.shields.io/github/license/E3V3A/pip-date.svg)](https://github.com/E3V3A/pip-date/blob/master/LICENSE.txt)  
+[![GitHub license][21]][22]
 A license to :sparkling_heart:!
 
 
-[10]: https://ci.appveyor.com/api/projects/status/github/pip-date/pip-date?branch=master&svg=true
-[11]: https://ci.appveyor.com/project/pip-date/pip-date
-[12]: https://api.codacy.com/project/badge/Grade/176ceaabe43d4113b535f2fbd0487a9e
-[13]: https://www.codacy.com/app/E3V3A/pip-date?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=E3V3A/pip-date&amp;utm_campaign=Badge_Grade
-[14]: https://codecov.io/gh/pip-date/pip-date/branch/master/graph/badge.svg
-[15]: https://codecov.io/gh/pip-date/pip-date
+[11]: https://ci.appveyor.com/api/projects/status/github/pip-date/pip-date?branch=master&svg=true
+[12]: https://ci.appveyor.com/project/pip-date/pip-date
+[13]: https://api.codacy.com/project/badge/Grade/176ceaabe43d4113b535f2fbd0487a9e
+[14]: https://www.codacy.com/app/E3V3A/pip-date?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=E3V3A/pip-date&amp;utm_campaign=Badge_Grade
+[15]: https://codecov.io/gh/pip-date/pip-date/branch/master/graph/badge.svg
+[16]: https://codecov.io/gh/pip-date/pip-date
+
+[21]: https://img.shields.io/github/license/E3V3A/pip-date.svg
+[22]: https://github.com/E3V3A/pip-date/blob/master/LICENSE.txt
