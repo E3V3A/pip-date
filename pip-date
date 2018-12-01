@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-# pipdate - Show the install date of all pip-installed python3 packages
+# pip-date - Show the install date of all pip-installed python3 packages
 # -*- coding: utf-8 -*-
+#----------------------------------------------------------------------
+#   Author:         E:V:A
+#   Date:           2018-12-01 
+#   Version:        1.0.2
+#   License:        GPLv3
+#   URL:            https://github.com/E3V3A/pip-date/
 #----------------------------------------------------------------------
 #  ToDo:
 #   [ ] better cehck for cTime when using multiple versions:
 #       usually the first version should be install date...
-#   [x] Add egg paths: -py3.6.egg-info
-#   [x] if you are generating a filename from this value you should combine it 
-#       with a call to to_filename() so all dashes ("-"") are replaced by underscores ("_"). See to_filename().
 #   [/] fix rounding of floats in [a/c/m]Time 
 #   [ ] If using Windows FS, then use cTime, if using *nix FS, use mTime ["platform.architecture()"]
 #
@@ -19,9 +22,9 @@
 #       - [ ] '-v'          : THIS program version
 #       - [ ] '-t <days>'   : To highlight packages installed <days> ago
 #
-# References:
-#   [1] 
-#   [2] 
+#  References: 
+#   [1] https://linuxhandbook.com/file-timestamps/
+#   [2] https://www.unixtutorial.org/atime-ctime-mtime-in-unix-filesystems/
 #----------------------------------------------------------------------
 import re, os, sys, subprocess
 import site, pkg_resources
@@ -29,16 +32,17 @@ from datetime import datetime
 from datetime import timedelta
 from time import strftime
 
-__version__ = '1.0.1'
-#version = '1.0.1'
+__version__ = '1.0.2'
 
 #------------------------------------------------
 # Text Coloring
 #------------------------------------------------
 # Usage:  print (yellow("This is yellow"))
 def color(text, color_code):
-    if sys.platform == "win32" and "xterm" not in os.getenv("TERM"):    # [xterm, xterm-color, xterm-256color]
-        return text
+    
+    # Temporary fix for issue #2
+    #if (sys.platform == "win32") and not ("xterm" in os.getenv("TERM")):    # [xterm, xterm-color, xterm-256color]
+    #    return text
     # for brighter colors, use "1;" in front of "color_code"
     bright = '' # '1;'
     return '\x1b[%s%sm%s\x1b[0m' % (bright, color_code, text)
@@ -49,7 +53,7 @@ def bgreen(text):  return color(text, '1;49;32');   # bright green
 def orange(text): return color(text, '0;49;91');    # 31 - Hard to look good! (or remains "red")
 def yellow(text): return color(text, 33)            # 
 def blue(text):   return color(text, '1;49;34')     # bright blue
-def purple(text): return color(text, 35)            # 
+def purple(text): return color(text, 35)            # aka. magenta
 def cyan(text):   return color(text, '0;49;96')     # 36
 def white(text):  return color(text, '0;49;97');    # bright white
 
@@ -62,7 +66,7 @@ def print_legend():
     print( "  {} = Bad / Non-Standard Installation Path".format(purple(cc)) )
     print( "  {} = Possibly Multiple installations (differing file times)".format(yellow(cc)) )
     print( "  {} = Recently Changed / Installed (in last 7 days)".format(cyan(cc)) )
-    print( "  {} = Non-PEM-compliant Version string (PEM-0440) | ~/.local install".format(green(cc)) )
+    print( "  {} = Non-PEM-compliant Version string (PEP-0440) | ~/.local install".format(green(cc)) )
     print( "  {} = A 'setuptools' dependency package".format(blue(cc)) )
     #print( "  {} = ERROR".format(white(cc)) )
 
@@ -99,7 +103,7 @@ def pre2txt(pre):
     return d[pre]
 
 def is_canonical(version):
-    # Check PEM-0440 Version string compliance:
+    # Check PEP-0440 Version string compliance:
     # https://www.python.org/dev/peps/pep-0440/
     return re.match(r'^([1-9]\d*!)?(0|[1-9]\d*)(\.(0|[1-9]\d*))*((a|b|rc)(0|[1-9]\d*))?(\.post(0|[1-9]\d*))?(\.dev(0|[1-9]\d*))?$', version) is not None
 
@@ -217,12 +221,8 @@ for d in pkg_resources.working_set :
     pkg_loc = test_loc(pkg_loc)
 
     pcnt += 1
-    ##pkg  += ["{:20}   {:<20}   {:<20}   {:<16}   {:<6}   {:3}".format(pkg_name.ljust(20,' '),pkg_ctime,pkg_mtime,pkg_ver,pkg_ins,pkg_pre) ]
-    #pkg  += ["{:20}   {:<20}   {:<20}   {:<16}   {:6}   {:3}   {:<5}".format(pkg_name.ljust(20,' '),pkg_ctime,pkg_mtime,pkg_ver,pkg_ins,pkg_pre,pkg_typ) ]
     pkg  += ["{:20}   {:<20}   {:<20}   {:<16}   {:6}   {:<4}   {:5}   {:3}".format(pkg_name.ljust(20,' '),pkg_ctime,pkg_mtime,pkg_ver,pkg_ins,pkg_pre,pkg_typ,pkg_loc) ]
 
-##header_str = "{:20}   {:20}   {:20}   {:16}   {:6}   {:3}".format('Package'.ljust(20, ' '), 'Installed (cTime)', 'Modified (mTime)', 'Version', 'Type', 'Prec')
-#header_str = "{:20}   {:20}   {:20}   {:16}   {:6}   {:3}   {:5}".format('Package'.ljust(20, ' '), 'Installed (cTime)', 'Modified (mTime)', 'Version', 'Inst', 'Prec', 'Type')
 header_str = "{:20}   {:20}   {:20}   {:16}   {:6}   {:4}   {:5}   {:3}".format('Package'.ljust(20, ' '), 'Installed (cTime)', 'Modified (mTime)', 'Version', 'Inst', 'Prec', 'Type ', 'Loc')
 hlen = len(header_str)
 
@@ -230,7 +230,7 @@ print('\n' + header_str)
 
 print("-"*hlen)
 spkg = sorted(pkg, key=str.lower)
-spkg = pkgcol(spkg)     # set color to pkg_name
+spkg = pkgcol(spkg)
 print('\n'.join(spkg))
 
 print("-"*hlen)

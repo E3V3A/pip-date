@@ -18,20 +18,22 @@ def readme():
 
 setup(
     name             = 'pip-date',
-    version          = '1.0.1',
+    version          = '1.0.2',
     author           = 'E:V:A',
     author_email     = 'xdae3v3a@gmail.com',
-    description      = 'Show the installation/modification times of all your pip packages',
-    long_description = 'A simple Python3 CLI tool to show the installation or modification times of all your pip packages.',
+    description      = 'Show the installation/modification times of all your pip packages and other tools',
+    long_description = 'A light CLI tool-set to show the installation or modification times of all your pip packages.',
     long_description_content_type='text/plain',
     #long_description = readme(),
     #long_description_content_type = 'text/markdown',
     license='LICENSE.txt',
     url = 'https://github.com/e3v3a/pip-date/',
     packages = find_packages(),
-    #scripts=['pip-date/pip-date', 'pip-date/pipbyday'],
-    scripts=['pip-date', 'pipbyday'],
-    keywords = 'pip date package setuptools wheel egg',
+    scripts=['pip-date', 'pip-describe', 'pipbyday', 'pyfileinfo', 'pyOSinfo'],
+    keywords = 'pip date package management setuptools wheel egg stat os',
+    install_requires=[
+        'requests',
+    ],
     python_requires = '>=3',
     classifiers=[
         #'Private :: Do Not Upload',

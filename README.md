@@ -1,15 +1,15 @@
-### pip-date -- Date your pip packages!
+### pip-date - Date your pip packages!
 
-[![PyPI version][1]][2]
-[![pypi supported versions][3]][4]
+[![pypi supported versions][1]][2]
+[![PyPI version][3]][4]
 [![Maintenance][5]][6]
 [![GitHub last commit][7]][8]
 [![Average time to resolve an issue][9]][10]
 
-[1]: https://badge.fury.io/py/pip-date.svg
-[2]: https://badge.fury.io/py/pip-date
-[3]: https://img.shields.io/pypi/pyversions/pip-date.svg
-[4]: https://pypi.python.org/pypi/pip-date
+[1]: https://img.shields.io/pypi/pyversions/pip-date.svg
+[2]: https://pypi.python.org/pypi/pip-date
+[3]: https://badge.fury.io/py/pip-date.svg
+[4]: https://badge.fury.io/py/pip-date
 [5]: https://img.shields.io/badge/Maintained%3F-yes-green.svg
 [6]: https://GitHub.com/E3V3A/pip-date/graphs/commit-activity
 [7]: https://img.shields.io/github/last-commit/E3V3A/pip-date.svg
@@ -21,7 +21,7 @@ A simple *Python3* CLI tool to show the installation or modification times of al
 
 | STATUS: | Version | Date | Maintained? |
 |:------- |:------- |:---- |:----------- |
-| Working | `1.0.1` | 2018-11-26 | YES |
+| Working | `1.0.2` | 2018-12-02 | YES |
 
 ---
 
@@ -81,8 +81,17 @@ and you don't really know what it is going to do.
 
 **Q:** *What else is included?*
 
-There is also a small script called `pipbyday` that will print a simple table with:  
-`mTime/aTime` +  `package-name` + `package-version`, sorted by time.
+* A script called **`pip-describe`**, that will do what *pip* doesn't, which is to show 
+the full text package description from PyPI, for a given *package*. Usually the README.
+
+* A script called **`pipbyday`**, that will print a simple table with:  
+  `mTime/aTime` +  `package-name` + `package-version`, sorted by time.
+
+* A script called **`pyfileinfo`**, that will show detailed file and date information 
+for a given file using python's `os.stat` info.
+
+* A script called **`pyOSinfo`**, that will print a number of *os, system* 
+and *platform* variables, as seen by your Python interpreter.
 
 
 **Q:** *Will I continue to support this tool?*
@@ -94,7 +103,12 @@ something just send me a PR, or at the very least, a detailed code snippet of wh
 
 ### Dependencies
 
-None. (Just what you already have: [Python3](https://www.python.org/) and [pip](https://github.com/pypa/pip/).)
+
+* [requests](https://github.com/requests/requests) - used by `pip-describe` to get PyPI info
+
+and what you already have: 
+* [Python3](https://www.python.org/) 
+* [pip](https://github.com/pypa/pip/).
 
 
 ### Installation 
@@ -108,7 +122,7 @@ pip install pip-date
 ```
 
 
-**For manual installation:**
+**For single file installation:**
 
 ```bash
 cd /usr/bin/
@@ -135,57 +149,6 @@ pip-date      # When it's in your PATH
 
 ---
 
-### DYI PyPI Packaging
-
-For your convenience, I will show you how to make a **simple** *python-only-script* pip-installable package like this one. 
-Just follow these steps. (Don't bother reading elsewhere, because 99.9% of Google's results are already outdated!)
-To get started, you have to make sure you have already installed: `setuptools`, `wheel` and `twine`.
-
-Then you need to register and get credentials for 2 accounts: 
-
-- https://pypi.org/account/register/ -- The **Live** PyPI 
-- https://test.pypi.org/account/register/ -- The Test PyPI
-
-
-Then Setup and edit:
-
-- **`~/.pipyrc`** - for adding the Username/Password credentials to `testpypi` and `pypi` repositories
-- **`__init__.py`** - for name and version (*but can be empty*)
-- **`setup.cfg`** - for distribution Python2/3 compatibility
-- **`setup.py`** - for all package details
-
-
-You need to edit the following files: 
-
-```bash
-__init__.py   # Can be empty
-CHANGES.txt   # Can be left out
-LICENSE.txt
-MyPyScript 	  # Your Python Script
-README.md
-setup.cfg     # Python2 or 3 or both?
-setup.py      # ALL your package details
-```
-
-
-Finally, to create the package, test it and upload it: 
-
-```bash
-cd pip-date
-python3 setup.py bdist_wheel        # create a wheel distribution: pip_date-1.0.0-py3-none-any.whl
-twine check dist/*                  # Check if your dist long-description will render correctly on PyPI
-twine upload -r pypitest dist/*     # Upload the project to PyPI with the "pypitest" index-server from ~/.pypirc
-# check your upload at: 
-# https://test.pypi.org/project/pip-date/
-
-# Make a test-install with: 
-pip install -i https://test.pypi.org/simple/ pip-date
-# If all ok, then delete from test.pypi.org and re-upload to live PyPI
-twine upload -r pypi dist/*
-```
-
----
-
 ### References:
 
 **Time Stamps**
@@ -202,7 +165,8 @@ that it has a Windows FS that need *ctime*, and that anything else should use *m
 
 Then we use: `os.path.getctime(pkg_loc)` to get the file time stamp.
 
-For all the gory details, see: [here](https://linuxhandbook.com/file-timestamps/), 
+For all the gory details, see: 
+[here](https://linuxhandbook.com/file-timestamps/), 
 [here](https://www.unixtutorial.org/atime-ctime-mtime-in-unix-filesystems/) and 
 [here](https://en.wikipedia.org/wiki/MAC_times). 
 
@@ -239,18 +203,19 @@ For all the gory details, see: [here](https://linuxhandbook.com/file-timestamps/
 
 ---
 
+#### Recommeded Similar Tools:
+
+- **[pip-check](https://github.com/bartTC/pip-check/)** - Check you pip package update status with nice ANSI colored CLI
+- **[pip-chill](https://github.com/rbanffy/pip-chill)** - Lists only the dependencies (or not) of installed packages
+
+---
+
 #### Bugs and Warnings
 
 None
 
 
 #### ToDo / Help Needed
-
-- [ ] improve the time stamp (TS) heuristic to use more reliable files to search for
-- [ ] improve the package type heuristic to show how a package was installed (*wheel* or *sdist*)
-- [ ] add an `Environment` column, to show in what virtual environment a package was installed in. 
-- [ ] improve highlighting of special package dependencies, such as [these](https://packaging.python.org/key_projects/).  
-      (e.g. Current implementation would for 'pip' also highlight any package with "pip" in it.)
 
 See issues marked [ToDo](https://github.com/E3V3A/pip-date/issues?q=is%3Aopen+is%3Aissue+label%3AToDo).
 
@@ -268,9 +233,10 @@ Feel free to fork, break, fix and contribute. Enjoy!
 
 #### License
 
-[![GitHub license][21]][22]
+[![GitHub license][21]][22]  
 A license to :sparkling_heart:!
 
+<sub>I use `GPLv3` because sharing code modifications is more beneficial for the world.</sub>
 
 [11]: https://ci.appveyor.com/api/projects/status/github/pip-date/pip-date?branch=master&svg=true
 [12]: https://ci.appveyor.com/project/pip-date/pip-date
