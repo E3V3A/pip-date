@@ -4,8 +4,8 @@
 #----------------------------------------------------------------------
 #   File Name       : pyOSinfo
 #   Author          : E:V:A
-#   Last Modified   : 2018-12-01
-#   Version         : 1.0.0
+#   Last Modified   : 2018-02-08
+#   Version         : 1.0.1
 #   License         : GPLv3
 #   URL             : https://github.com/E3V3A/pip-date/
 #   Description     : Show some system, os and platform information as seen by python3
@@ -13,9 +13,16 @@
 import os, sys, platform, site
 from os.path import join
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 TRUECOLOR = "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m"
+
+def hasUname(): 
+	try: 
+		os.uname()[0]
+		return True
+	except:
+		return False
 
 print("\nCurrent OS variables as seen by Python3 (%s)\n" % platform.python_version() )
 print('os.getenv(\"TERM\"):   %s' % os.getenv("TERM"))   # [xterm, xterm-color, xterm-256color]
@@ -24,12 +31,17 @@ print('os.sys.platform:     %s' % os.sys.platform )      # [linux, win32, cygwin
 print('sys.platform:        %s' % sys.platform )         # [linux, win32, cygwin, darwin]
 print('TRUECOLOR (orange):  %s' % TRUECOLOR )            # TRUECOLOR written in nice orange
 
+# Apparently some Windows Pythons doesn't provide os.uname attribute.
+# Like:  Winpython64-3.6.7.0Zero
 print('\nos.uname:') # sysname, nodename, release, version, machine
-print('\tnodename:      %s' % os.uname()[1] ) #
-print('\tmachine:       %s' % os.uname()[4] ) #
-print('\tsysname:       %s' % os.uname()[0] ) #
-print('\trelease:       %s' % os.uname()[2] ) #
-print('\tversion:       %s' % os.uname()[3] ) #
+if hasUname():
+	print('\tnodename:      %s' % os.uname()[1] ) 	#
+	print('\tmachine:       %s' % os.uname()[4] ) 	#
+	print('\tsysname:       %s' % os.uname()[0] ) 	#
+	print('\trelease:       %s' % os.uname()[2] ) 	#
+	print('\tversion:       %s' % os.uname()[3] )	#
+else: 
+	print('\tN/A' )
 
 print('\nplatform:')
 print('\tnode:          %s' % platform.node() )
@@ -44,8 +56,12 @@ print('\tarchitecture (2):  (%s,%s)' % platform.architecture() )            # (b
 #print('\twin32_ver (4):     (%s,%s,%s,%s)' % platform.win32_ver() )         # (release, version, csd, ptype) 
 
 print("\nsite:")
-print("\tgetsitepackages[0]:  %s" % site.getsitepackages()[0])
-print("\tPREFIXES (2):        %s" % site.PREFIXES)
+print("\tgetusersitepackages: %s" % site.getusersitepackages())
+i=0
+for ploc in site.getsitepackages(): 		# Returns a []
+	print("\tgetsitepackages[%i]:  %s" % (i, ploc)) 	# site.getsitepackages()[0])
+	i+=1
+print("\n\tPREFIXES (2):        %s" % site.PREFIXES)
 print("\tUSER_SITE:           %s" % site.USER_SITE)
 print("\tUSER_BASE:           %s" % site.USER_BASE) 
 

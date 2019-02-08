@@ -1,1 +1,45 @@
-v1.0.1, 2018-11-26 -- Initial release.
+v1.0.3, 2018-02-08 -- New Release and bug fixes:
+
+* Fixed path search mechnaism for full Linux support. Fixed #6
+* Fixed pyfileinfo crashing on binary files. Fixed #8
+* Fixed correct time order for [acm]time
+* Better terminal color-code comptibility check. Fixed #3
+* Removed ANSI control code garbage for non-ANSI-compatible 
+  terminals often found on Windows (CMD, PowerShell). Fixed #2
+* Implemented a 'uname' check for non-uname supported OS's
+* Improved IBM-437 OEM_CHARSET support for block characters. Fixed #5
+* Improved usage text to pip-describe. Fixes #7
+* Improved package location info: [apt,dev,sys,usr]
+* Improved pyOSinfo getsitepackages() info
+* Improved pipbyday to also show package location 
+* Clarified table header and made it dynamic for different OS
+* Added usage help text to pip-date
+
+This release fixes all bugs that I could find and track.
+But I don't have a Mac so have not been able to test it there.
+
+Affected files:
+
+      modified:   CHANGES.txt
+      modified:   README.md
+      modified:   __init__.py
+      modified:   pip-date
+      modified:   pip-describe
+      modified:   pipbyday
+      modified:   pyOSinfo
+      modified:   pyfileinfo
+      modified:   setup.py
+
+
+v1.0.2, 2018-12-02 --  Package maintenance update with 3 new tools
+
+    * Fix for issue #2 (windows)
+    * Fixed UI PEP typo
+    * Added pip-describe (requests) - get full descriptions of not installed packages
+    * Added pyOSinfo - to get os,platform info
+    * Added pyfileinfo - to get python-based stat info
+    * General code and README cleanup
+    * Updated color-highlight scheme
+
+
+v1.0.1, 2018-11-26 -- Initial release

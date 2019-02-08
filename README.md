@@ -21,7 +21,7 @@ A simple *Python3* CLI tool to show the installation or modification times of al
 
 | STATUS: | Version | Date | Maintained? |
 |:------- |:------- |:---- |:----------- |
-| Working | `1.0.2` | 2018-12-02 | YES |
+| Working | `1.0.3` | 2019-02-08 | YES |
 
 ---
 
@@ -46,7 +46,7 @@ I also has some functionality of checking packages for outdated and deprecated i
 But it can do more. Some features are:
 
 - Highlight packages with inconsistent file modification times (*mTime*).
-- Highlight package **versions** which are not conforming to the [PEM-0440](https://www.python.org/dev/peps/pep-0440/) standard.
+- Highlight package **versions** which are not conforming to the [PEP-0440](https://www.python.org/dev/peps/pep-0440/) standard.
 - Highlight packages installed with an unusual package distribution *priority* given by:  **`[chk, src, bin, egg, dev]`**
 - Highlight *`setuptools`* dependency packages for easy review
 - Show package installation type:  with pip/wheel as **`wheel`**, and source as **`sdist`**  (**FIX!**)
@@ -81,8 +81,8 @@ and you don't really know what it is going to do.
 
 **Q:** *What else is included?*
 
-* A script called **`pip-describe`**, that will do what *pip* doesn't, which is to show 
-the full text package description from PyPI, for a given *package*. Usually the README.
+* A script called **`pip-describe`**, that will do what *pip* doesn't, which is to show the 
+full-text `long_description` for **any** PyPI package (including those not already installed).
 
 * A script called **`pipbyday`**, that will print a simple table with:  
   `mTime/aTime` +  `package-name` + `package-version`, sorted by time.
@@ -108,7 +108,7 @@ something just send me a PR, or at the very least, a detailed code snippet of wh
 
 and what you already have: 
 * [Python3](https://www.python.org/) 
-* [pip](https://github.com/pypa/pip/).
+* [pip](https://github.com/pypa/pip/)
 
 
 ### Installation 

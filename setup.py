@@ -18,7 +18,7 @@ def readme():
 
 setup(
     name             = 'pip-date',
-    version          = '1.0.2',
+    version          = '1.0.3',
     author           = 'E:V:A',
     author_email     = 'xdae3v3a@gmail.com',
     description      = 'Show the installation/modification times of all your pip packages and other tools',
@@ -27,7 +27,7 @@ setup(
     #long_description = readme(),
     #long_description_content_type = 'text/markdown',
     license='LICENSE.txt',
-    url = 'https://github.com/e3v3a/pip-date/',
+    url = 'https://github.com/E3V3A/pip-date/',
     packages = find_packages(),
     scripts=['pip-date', 'pip-describe', 'pipbyday', 'pyfileinfo', 'pyOSinfo'],
     keywords = 'pip date package management setuptools wheel egg stat os',
@@ -42,12 +42,13 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Software Development :: Version Control',
         'Topic :: System :: Software Distribution',
         'Topic :: System :: Installation/Setup',
     ],
     project_urls={
-        'Bug Reports': 'https://github.com/e3v3a/pip-date/issues',
+        'Bug Reports': 'https://github.com/E3V3A/pip-date/issues',
         #'Funding' : 'https://donate.pypi.org',
         #'Credits' : 'http://saythanks.io/to/example',
         #'Source'  : 'https://github.com/pypa/sampleproject/',

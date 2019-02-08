@@ -4,8 +4,8 @@
 #----------------------------------------------------------------------
 #  File Name        : pip-describe
 #  Author           : E:V:A
-#  Last Modified    : 2018-12-01
-#  Version          : 1.0.0
+#  Last Modified    : 2018-02-08
+#  Version          : 1.0.1
 #  License          : GPLv3
 #  URL              : https://github.com/E3V3A/pip-date
 #----------------------------------------------------------------------
@@ -13,21 +13,22 @@
 #        from the `pip search` results. 
 #  [ ]   But we can always add CLI switch `-s` for summary
 #----------------------------------------------------------------------
-import sys
+import os, sys
 #import requests as req
 
 try:
     import requests as req
-except ModuleNotFoundError as err:
+# exception ImportError as err:     # 3.3
+except ModuleNotFoundError as err:  # 3.6
     print("\nThis program need the \"requests\" package to work.") 
     print("Please download and install from:\nhttps://github.com/requests/requests")
     print(err)
     sys.exit(1)
 
-__version__ = '1.0.0'
+__version__ = '1.0.1'
 
 def usage() :
-    print("\n Usage:  %s <package-name>\n" % sys.argv[0])
+    print("\n Usage:  %s <package-name>\n" % os.path.basename(__file__)) # sys.argv[0]
     print(" This will return the full-text package description (usually the README)")
     print(" as found on PyPI, for any given <package-name>.\n")
     print(" This script is part of the pip-date package at:")
@@ -53,3 +54,5 @@ if res.status_code == 200:
 else:
     print('\nERROR (%s): Package \"%s\" doesn\'t exist!' % (res.status_code,pkg))
     sys.exit(2)
+
+sys.exit(0)

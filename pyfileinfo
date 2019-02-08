@@ -4,8 +4,8 @@
 #----------------------------------------------------------------------
 #  File Name        : pyfileinfo
 #  Author           : E:V:A
-#  Last Modified    : 2018-12-01
-#  Version          : 1.1.0
+#  Last Modified    : 2018-02-08
+#  Version          : 1.1.1
 #  License          : GPLv3
 #  URL              : https://github.com/E3V3A/pip-date
 #  Description      : Show detailed file information for a given file using python's os.stat info
@@ -17,13 +17,13 @@
 import os, sys, stat, platform
 import time, getopt
 
-__version__ = '1.1.0'
+__version__ = '1.1.1'
 
 #------------------------------------------------
 # Helper Functions
 #------------------------------------------------
 def usage() :
-    print("\nUsage:  %s <file>" % sys.argv[0])
+    print("\nUsage:  %s <file>" % os.path.basename(__file__))
     print("\nOptions:")
     print(" -c             : For License/Copyright info")
     print(" -h, --help     : For this help ")
@@ -90,11 +90,17 @@ except IsADirectoryError as e:
     sys.exit(2)
 
 count = 0
-for lines in fhand:
-    count = count + 1
-
-fdata  = open(filename).read()
-t_char = len(fdata) 
+is_binary = False
+try:
+    for lines in fhand:
+        count = count + 1
+    fdata  = open(filename).read()
+    t_char = len(fdata)
+except UnicodeDecodeError as e:
+    #print ("\nThis is a binary file.")
+    is_binary = True
+    t_char = 0
+    pass 
 
 try:
     file_stats = os.stat(filename)
@@ -117,7 +123,15 @@ file_info = {
 }
 
 print (" File Name       : ", file_info['fname'])
-print (" File Type       : ", "directory" if stat.S_ISDIR(file_stats[stat.ST_MODE]) else "\"normal\" file")
+print (" File Type       : ", end='')
+if (stat.S_ISDIR(file_stats[stat.ST_MODE])):
+    print (" directory")
+    #sys.exit(2)
+elif is_binary: 
+    print (" binary")
+else: 
+    print(" normal (text) file")
+
 print (" File Size       : ", file_info['fsize'] , " (bytes)")
 print (" Total Lines     : ", file_info['no_of_lines'])
 print (" Total Chars     : ", file_info['t_char'])
