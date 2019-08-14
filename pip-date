@@ -261,11 +261,13 @@ if isWinFS():
 #       /usr/lib/python3.6/dist-packages        
 # Also add the unprivileged user's local package location:  
 #       $HOME/.local/lib/python3.6/site-packages/
-site_loc = site.getsitepackages()           # [...]
-if debug: print("site_locs (site): ", site_loc) 
-site_loc += [site.getusersitepackages()]    # add $HOME/.local/lib/python3.6/site-packages/
-if debug: print("site_locs (all): ", site_loc) 
-
+try:
+    site_loc = site.getsitepackages()           # [...]
+    if debug: print("site_locs (site): ", site_loc) 
+    site_loc += [site.getusersitepackages()]    # add $HOME/.local/lib/python3.6/site-packages/
+    if debug: print("site_locs (all): ", site_loc) 
+except AttributeError:
+    site_loc = site.USER_SITE
 
 for d in pkg_resources.working_set :
 
