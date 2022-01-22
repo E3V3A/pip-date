@@ -4,11 +4,18 @@
 #----------------------------------------------------------------------
 #   File Name       : pyOSinfo
 #   Author          : E:V:A
-#   Last Modified   : 2018-02-08
+#   Last Modified   : 2018-02-08	updated 2020-11-07
 #   Version         : 1.0.1
 #   License         : GPLv3
 #   URL             : https://github.com/E3V3A/pip-date/
 #   Description     : Show some system, os and platform information as seen by python3
+#----------------------------------------------------------------------
+# NOTE: 
+# 	On Cygwin, yuo have to pay attention to the parts of the PATH 
+# 	that is cpoied fromt he Windows (System PATH). This will interfere 
+# 	with the resulsts of 'os.name' [nt vs posix], depeding on which 
+#  	python*.exe was	used. Try to test with:
+#	ls -al `which python.exe`
 #----------------------------------------------------------------------
 import os, sys, platform, site
 from os.path import join

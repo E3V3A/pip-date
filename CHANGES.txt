@@ -1,9 +1,26 @@
-v1.0.3, 2018-02-08 -- New Release and bug fixes:
+
+v1.0.4, 2022-01-22 -- Sync of old work
+
+* Synchronisation of previous work (2019-02-15), not pushed to repo.
+
+New Release and bug fixes:
+
+* Added __main__ function coding style
+* Added __author__ etc.
+* Added new search tool: pip-search
+* Fixed confused [acm]times as used in Windows-10, WSL
+* Some code cleanup to improve flake8 code formatting analysis:
+* Removed unused imports
+* Removed redundant whitespace not affecting readability
+* Fixed wrong date in CHANGES.txt
+
+
+v1.0.3, 2019-02-08 -- New Release and bug fixes:
 
 * Fixed path search mechnaism for full Linux support. Fixed #6
 * Fixed pyfileinfo crashing on binary files. Fixed #8
 * Fixed correct time order for [acm]time
-* Better terminal color-code comptibility check. Fixed #3
+* Better terminal color-code compatibility check. Fixed #3
 * Removed ANSI control code garbage for non-ANSI-compatible 
   terminals often found on Windows (CMD, PowerShell). Fixed #2
 * Implemented a 'uname' check for non-uname supported OS's
