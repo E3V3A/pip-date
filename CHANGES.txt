@@ -1,3 +1,11 @@
+v1.0.5, 2022-01-23 -- New Release and bug fixes:
+
+* Added `*.py` extension to all script files for Windows compatibility
+  (Fixes #12 and #22)
+* Fixed #21, pip-search with no arg issue
+* Add sys.implementation to pyOSinfo (fixes #13)
+* Bump version v1.0.5
+
 v1.0.4, 2022-01-22 -- New Release and bug fixes:
 
 * Fixed PR #11 for venv exception handling

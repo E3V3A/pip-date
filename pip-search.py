@@ -3,8 +3,8 @@
 #----------------------------------------------------------------------
 #  File Name        : pip-search.py
 #  Author           : E:V:A
-#  Last Modified    : 2022-01-22
-#  Version          : 1.0.1
+#  Last Modified    : 2022-01-23
+#  Version          : 1.0.2
 #  License          : GPLv3
 #  URL              : https://github.com/E3V3A/pip-date
 #  Description      : Getting a list of pip packages matching a string
@@ -39,32 +39,57 @@ import datetime
 import requests
 from lxml import html
 
+__author__ = "E:V:A (E3V3A)"
+__copyright__ = "GPLv3 2022"
+__version__ = '1.0.2'
+
 debug = 0
+showline = '  '+'-'*60
+
 #TS = '{:%Y%m%d_%H%M%S}'.format(datetime.datetime.now())
 TS = '{:%Y%m%d}'.format(datetime.datetime.now())
 filename = 'tmp_piplist_{}.txt'.format(TS)
 
-showline = '  '+'-'*60
-
-arg  = "pyt"
-arg = sys.argv[1] 				# CLI provided search string (args[0])
-rep = r'.*{}.*'.format(arg)		# pattern
-rec = re.compile(rep, re.I)		# compiled
-
-my_headers = {'user-agent': 'curl/7.55.1','accept': 'application/json', 'content-type': 'application/json', 'referer': 'https://pypi.org/', 'cache-control': 'no-cache', 'connection': 'close'}
 name_list = []
 match_list = []
+my_headers = {'user-agent': 'curl/7.55.1','accept': 'application/json', 'content-type': 'application/json', 'referer': 'https://pypi.org/', 'cache-control': 'no-cache', 'connection': 'close'}
+
+#----------------------------------------------------------
+# Print Usage
+#----------------------------------------------------------
+def usage():
+    print('\n Usage:  {} <partial-name> | "<RegEx>"\n'.format( os.path.basename(__file__)) )
+    print(' Getting a list of pip packages matching a partial name string.')
+    print(' The string can also be a RegEx for matching unknown packages.')
+    print(' This script is part of the \'pip-date\' package.')
+    print(" Please file any bug reports at:")
+    print(" https://github.com/E3V3A/pip-date/\n")
+    print(' Version:  {}'.format(__version__))
+    print(' License:  {}\n'.format(__copyright__))
+    sys.exit(2)
+
+#----------------------------------------------------------
+# CLI arguments
+#----------------------------------------------------------
+arg  = "pyt"
+narg = len(sys.argv) - 1
+if narg != 1:
+	usage()
+arg = sys.argv[1] 				# CLI provided search string (args[0])
+
+rep = r'.*{}.*'.format(arg)		# pattern
+rec = re.compile(rep, re.I)		# compiled
 
 #----------------------------------------------------------------------
 # Utilitiy Functions
 #----------------------------------------------------------------------
+
 def print_warn():
     print('\n  Warning!')
     print('  Searching all ~350,000 pip packages can take a very long time!')
     print('  This script will first download the 19 MB (HTML) file, and only')
     print('  then search the list for the content requested.')
     print('  This can take up to 20 seconds.\n')
-
 
 def save_list(file, data):
 	print('  Saving package list to file:\n  ./{} '.format(file))
@@ -150,6 +175,7 @@ def print_matches(name_list):
 #----------------------------------------------------------------------
 #  Main
 #----------------------------------------------------------------------
+
 print_warn()
 
 name_list = load_list(filename)

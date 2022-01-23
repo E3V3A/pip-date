@@ -18,7 +18,7 @@ def readme():
 
 setup(
     name             = 'pip-date',
-    version          = '1.0.4',
+    version          = '1.0.5',
     author           = 'E:V:A',
     author_email     = 'xdae3v3a@gmail.com',
     description      = 'Show the installation/modification times of all your pip packages and other tools',
@@ -29,7 +29,7 @@ setup(
     license='LICENSE.txt',
     url = 'https://github.com/E3V3A/pip-date/',
     packages = find_packages(),
-    scripts=['pip-date', 'pip-describe', 'pip-search.py', 'pipbyday', 'pyfileinfo', 'pyOSinfo'],
+    scripts=['pip-date.py', 'pip-describe.py', 'pip-search.py', 'pipbyday.py', 'pyfileinfo.py', 'pyOSinfo.py'],
     keywords = 'pip date package management setuptools wheel egg stat os',
     install_requires=[
         'requests', 'lxml',

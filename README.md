@@ -21,7 +21,7 @@ A simple *Python3* CLI tool to show the installation or modification times of al
 
 | STATUS: | Version | Date | Maintained? |
 |:------- |:------- |:---- |:----------- |
-| Working | `1.0.4` | 2022-01-22 | YES |
+| Working | `1.0.5` | 2022-01-23 | YES |
 
 ---
 
