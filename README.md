@@ -21,7 +21,7 @@ A simple *Python3* CLI tool to show the installation or modification times of al
 
 | STATUS: | Version | Date | Maintained? |
 |:------- |:------- |:---- |:----------- |
-| Working | `1.0.3` | 2019-02-08 | YES |
+| Working | `1.0.4` | 2022-01-22 | YES |
 
 ---
 
@@ -93,6 +93,10 @@ for a given file using python's `os.stat` info.
 * A script called **`pyOSinfo`**, that will print a number of *os, system* 
 and *platform* variables, as seen by your Python interpreter.
 
+* **`NEW`** A script called (hold your breath!) **`pip-search`**, that will download and 
+search all of the PyPi package database for packages matching your search criteria. 
+However, for colored and sexy package searches, I recommend using [pip_search](https://github.com/victorgarric/pip_search).
+Also, for cool powershell wrapper of pip-search, read [this](https://github.com/E3V3A/pip-date/issues/17#issuecomment-1019325517).
 
 **Q:** *Will I continue to support this tool?*
 
@@ -105,6 +109,7 @@ something just send me a PR, or at the very least, a detailed code snippet of wh
 
 
 * [requests](https://github.com/requests/requests) - used by `pip-describe` to get PyPI info
+* [lxml](https://github.com/lxml/lxml) - used by `pip-search` to parse html from PyPI
 
 and what you already have: 
 * [Python3](https://www.python.org/) 
@@ -203,11 +208,12 @@ For all the gory details, see:
 
 ---
 
-#### Recommeded Similar Tools:
+#### Recommeded or Similar Tools:
 
 - **[pip-check](https://github.com/bartTC/pip-check/)** - Check you pip package update status with nice ANSI colored CLI
 - **[pip-chill](https://github.com/rbanffy/pip-chill)** - Lists only the dependencies (or not) of installed packages
-
+- **[pip_search](https://github.com/victorgarric/pip_search)** - Victor's amazing pip search replacement
+- **[venvlink](https://github.com/np-8/venvlink)** - Using virtual environments outside of the project folder, like a boss!
 ---
 
 #### Bugs and Warnings

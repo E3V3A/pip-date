@@ -1,10 +1,21 @@
+v1.0.4, 2022-01-22 -- New Release and bug fixes:
+
+* Fixed PR #11 for venv exception handling
+* Fixed pyOSinfo uname issue.
+* Fixed ANSI color capability check in is_posix()
+  (May have broken on older Windows machines or Python versions.)
+* Fixed wrong Windows-10 creation and modification times ([cm]Times)
+  (Need feedback from native *nix users.)
+* Added new script pip-search 
+* Changed Shebangs from 'python3' to 'python'
+* Updated README
+* Bump version v1.0.4
 
 v1.0.4, 2022-01-22 -- Sync of old work
 
-* Synchronisation of previous work (2019-02-15), not pushed to repo.
+* Synchronisation of previous work (2019-02-15) not pushed to repo.
 
 New Release and bug fixes:
-
 * Added __main__ function coding style
 * Added __author__ etc.
 * Added new search tool: pip-search
@@ -13,7 +24,6 @@ New Release and bug fixes:
 * Removed unused imports
 * Removed redundant whitespace not affecting readability
 * Fixed wrong date in CHANGES.txt
-
 
 v1.0.3, 2019-02-08 -- New Release and bug fixes:
 

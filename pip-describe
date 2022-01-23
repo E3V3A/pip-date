@@ -1,5 +1,4 @@
-#!/usr/bin/env python3 
-# pip-describe - Show full text package description from PyPI
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 #----------------------------------------------------------------------
 #  File Name        : pip-describe
@@ -8,9 +7,10 @@
 #  Version          : 1.0.1
 #  License          : GPLv3
 #  URL              : https://github.com/E3V3A/pip-date
+# Description:      : Show full text package description from PyPI
 #----------------------------------------------------------------------
-# NOTE:  We don't do the summary as it is already available 
-#        from the `pip search` results. 
+# NOTE:  We don't do the summary as it is already available
+#        from the `pip search` results.
 #  [ ]   But we can always add CLI switch `-s` for summary
 #----------------------------------------------------------------------
 import os, sys
@@ -20,7 +20,7 @@ try:
     import requests as req
 # exception ImportError as err:     # 3.3
 except ModuleNotFoundError as err:  # 3.6
-    print("\nThis program need the \"requests\" package to work.") 
+    print("\nThis program need the \"requests\" package to work.")
     print("Please download and install from:\nhttps://github.com/requests/requests")
     print(err)
     sys.exit(1)
@@ -47,7 +47,7 @@ if res.status_code == 200:
     dat = res.json()
     #smm = dat['info']['summary'].strip()        # (short) description
     des = dat['info']['description'].strip()    # long_description (often full README)
-    print("\nPackage Description:") 
+    print("\nPackage Description:")
     print("-"*80)
     print("%s" % des)
     print("-"*80)

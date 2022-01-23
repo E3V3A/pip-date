@@ -1,6 +1,6 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# pipbyday- Prints when python packages were installed
+# pipbyday - Prints when python packages were installed
 #----------------------------------------------------------------------
 #  File Name        : pipbyday
 #  Author           : E:V:A
@@ -53,7 +53,7 @@ if __name__ == "__main__":
             mtime = os.path.getctime(pkg_loc)   # modification time on Windows
         else:
             mtime = os.path.getmtime(pkg_loc)   # modification time on Linux
-        
+
         mtime = datetime.fromtimestamp(mtime).strftime("%Y-%m-%d  %H:%M:%S")
         #packages.append([mtime, pkg_nam_ver])
         packages.append([mtime, pkg_nam_ver, pkg_loc])

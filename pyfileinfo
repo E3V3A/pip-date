@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-# pyfileinfo - Get detailed file info from "stat" of file
 # -*- coding: utf-8 -*-
+# pyfileinfo - Get detailed file info from "stat" of file
 #----------------------------------------------------------------------
 #  File Name        : pyfileinfo
 #  Author           : E:V:A
@@ -9,8 +9,8 @@
 #  License          : GPLv3
 #  URL              : https://github.com/E3V3A/pip-date
 #  Description      : Show detailed file information for a given file using python's os.stat info
-# 
-#  References: 
+#
+#  References:
 #   [1] https://linuxhandbook.com/file-timestamps/
 #   [2] https://www.unixtutorial.org/atime-ctime-mtime-in-unix-filesystems/
 #----------------------------------------------------------------------
@@ -31,7 +31,7 @@ def usage() :
     sys.exit()
 
 def copyright():
-    print("\nProgram License:  GPLv3\nMaintenance URL:  https://github.com/E3V3A/pip-date") 
+    print("\nProgram License:  GPLv3\nMaintenance URL:  https://github.com/E3V3A/pip-date")
     sys.exit()
 
 def pversion():
@@ -55,7 +55,7 @@ def print_legend():
 #------------------------------------------------
 # CLI arguments
 #------------------------------------------------
-narg = len(sys.argv) - 1 
+narg = len(sys.argv) - 1
 
 try:
     opts, args = getopt.getopt(sys.argv[1:], ":hvc", ["help", "version"])
@@ -63,9 +63,9 @@ except getopt.GetoptError :
     usage()
     sys.exit(2)
 
-if not opts: 
-    if not args or narg > 1: 
-        usage(); 
+if not opts:
+    if not args or narg > 1:
+        usage();
         sys.exit();
     elif narg == 1:
         filename = args[0]
@@ -73,7 +73,7 @@ else:
     for opt, arg in opts:
         if opt in ("-h", "--help"): usage();
         elif opt in ("-v", "--version"): pversion();
-        elif opt == "-c": copyright(); 
+        elif opt == "-c": copyright();
 
 #------------------------------------------------
 # MAIN
@@ -83,7 +83,7 @@ if platform.architecture()[1] == "WindowsPE":
 else:
     isWinFS = False
 
-try: 
+try:
     fhand = open(filename)
 except IsADirectoryError as e:
     print ("ERROR:  %s" % e)
@@ -100,7 +100,7 @@ except UnicodeDecodeError as e:
     #print ("\nThis is a binary file.")
     is_binary = True
     t_char = 0
-    pass 
+    pass
 
 try:
     file_stats = os.stat(filename)
@@ -127,9 +127,9 @@ print (" File Type       : ", end='')
 if (stat.S_ISDIR(file_stats[stat.ST_MODE])):
     print (" directory")
     #sys.exit(2)
-elif is_binary: 
+elif is_binary:
     print (" binary")
-else: 
+else:
     print(" normal (text) file")
 
 print (" File Size       : ", file_info['fsize'] , " (bytes)")
@@ -145,7 +145,7 @@ if isWinFS:
     print (" ctime: OS change time  : ", file_info['f_ct'], "  (PS:  n/a)")
     print (" mtime: user modified   : ", file_info['f_lm'], "  (PS:  .LastWriteTime)")
     print (" atime: creation time   : ", file_info['f_la'], "  (PS:  .CreationTime = .LastAccessTime)")
-else: 
+else:
     print("Using a Linux based OS?")
     print (" ctime: creation time   : ", file_info['f_ct'])
     print (" mtime: last modified   : ", file_info['f_lm'])
