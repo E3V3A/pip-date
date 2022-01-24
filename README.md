@@ -239,6 +239,7 @@ Feel free to fork, break, fix and contribute. Enjoy!
 #### Additional Badges
 
 [![build status][11]][12] [![codecov][13]][14]
+[![codecov](https://codecov.io/gh/E3V3A/pip-date/branch/master/graph/badge.svg?token=wHBDKVmtPk)](https://codecov.io/gh/E3V3A/pip-date)
 
 ---
 
