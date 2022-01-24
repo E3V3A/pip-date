@@ -3,8 +3,8 @@
 #----------------------------------------------------------------------
 #  File Name        : pip-search.py
 #  Author           : E:V:A
-#  Last Modified    : 2022-01-23
-#  Version          : 1.0.2
+#  Last Modified    : 2022-01-24
+#  Version          : 1.0.3
 #  License          : GPLv3
 #  URL              : https://github.com/E3V3A/pip-date
 #  Description      : Getting a list of pip packages matching a string
@@ -41,7 +41,7 @@ from lxml import html
 
 __author__ = "E:V:A (E3V3A)"
 __copyright__ = "GPLv3 2022"
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 
 debug = 0
 showline = '  '+'-'*60
@@ -176,16 +176,20 @@ def print_matches(name_list):
 #  Main
 #----------------------------------------------------------------------
 
-print_warn()
+def main_func(): 
+	print_warn()
 
-name_list = load_list(filename)
-if not (name_list): 
-	name_list = download_pip_list()
-	save_list(filename, name_list)
+	name_list = load_list(filename)
+	if not (name_list): 
+		name_list = download_pip_list()
+		save_list(filename, name_list)
 
-print_matches(name_list)
-print('ok\n')
+	print_matches(name_list)
+	print('ok\n')
 
+if __name__ == "__main__":
+    main_func()
+    sys.exit(0)
 
 #----------------------------------------------------------------------
 #  EOF

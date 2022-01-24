@@ -5,8 +5,8 @@
 #   File Name       : pyOSinfo
 #   Author          : E:V:A
 #   Date            : 2018-02-08
-#   Last Modified   : 2022-01-23
-#   Version         : 1.0.2
+#   Last Modified   : 2022-01-24
+#   Version         : 1.0.5
 #   License         : GPLv3
 #   URL             : https://github.com/E3V3A/pip-date/
 #   Description     : Show some system, os and platform information as seen by python3
@@ -21,7 +21,7 @@
 import os, sys, platform, site
 from os.path import join
 
-__version__ = '1.0.2'
+__version__ = '1.0.5'
 
 TRUECOLOR = "\x1b[38;2;255;100;0mTRUECOLOR\x1b[0m"
 
@@ -63,6 +63,13 @@ print('\tuname (6)   : {}'.format(platform.uname()) )                   # (syste
 print('\tarchitecture (2):  (%s,%s)' % platform.architecture() )        # (bits, linkage)
 #print('\twin32_ver (4):     (%s,%s,%s,%s)' % platform.win32_ver() )    # (release, version, csd, ptype)
 
+# python -c "import os, sys; print(sys.implementation);"
+# (_multiarch='x86_64-cygwin', cache_tag='cpython-38', hexversion=50856116, name='cpython', version=sys.version_info(major=3, minor=8, micro=0, releaselevel='beta', serial=4))
+# (name='cpython', cache_tag='cpython-310', version=sys.version_info(major=3, minor=10, micro=0, releaselevel='final', serial=0), hexversion=50987248)
+print('\nsys:')
+#print('\timplementation (7)   : {}'.format(sys.implementation()) )      #
+print('\timplementation (7)   :  WIP')      #
+
 print("\nsite:")
 print("\tgetusersitepackages: %s" % site.getusersitepackages())
 i=0
@@ -72,7 +79,7 @@ for ploc in site.getsitepackages():                     # Returns a []
 print()
 print("\tPREFIXES (2) :        %s" % site.PREFIXES)
 print("\tUSER_SITE    :        %s" % site.USER_SITE)
-print("\tUSER_BASE    :        %s" % site.USER_BASE) 
+print("\tUSER_BASE    :        %s" % site.USER_BASE)
 
 print('\nsys.path:\n\t%s\n' % ('\n\t'.join(sys.path)) )
 

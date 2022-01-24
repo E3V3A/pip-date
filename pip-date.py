@@ -3,7 +3,8 @@
 #----------------------------------------------------------------------
 #   Author:         E:V:A
 #   Date:           2018-02-15
-#   Version:        1.0.4
+#   Change:         2022-01-24
+#   Version:        1.0.5
 #   License:        GPLv3
 #   URL:            https://github.com/E3V3A/pip-date/
 #   Description     Show the install date of all pip-installed python3 packages
@@ -50,7 +51,7 @@ from datetime import timedelta
 __author__ = "E:V:A (E3V3A)"
 __copyright__ = "GPLv3 2022"
 #__credits__ = ["https://github.com/E3V3A/pip-date/"]
-__version__ = '1.0.4'
+__version__ = '1.0.5'
 
 #----------------------------------------------------------
 # OS Check-1

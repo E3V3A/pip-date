@@ -31,6 +31,11 @@ Example Output:
 
 ![Full](./docs/screen2.png)
 
+
+Using `pip-search <RegEx>`:
+
+![Full](./docs/screen3.png)
+
 ---
 
 **Q:** *What does **`pip-date`** do?*
@@ -233,7 +238,7 @@ Feel free to fork, break, fix and contribute. Enjoy!
 
 #### Additional Badges
 
-[![build status][11]][12] [![Codacy Badge][13]][14] [![codecov][15]][16]
+[![build status][11]][12] [![codecov][13]][14]
 
 ---
 
@@ -246,10 +251,8 @@ A license to :sparkling_heart:!
 
 [11]: https://ci.appveyor.com/api/projects/status/github/pip-date/pip-date?branch=master&svg=true
 [12]: https://ci.appveyor.com/project/pip-date/pip-date
-[13]: https://api.codacy.com/project/badge/Grade/176ceaabe43d4113b535f2fbd0487a9e
-[14]: https://www.codacy.com/app/E3V3A/pip-date?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=E3V3A/pip-date&amp;utm_campaign=Badge_Grade
-[15]: https://codecov.io/gh/pip-date/pip-date/branch/master/graph/badge.svg
-[16]: https://codecov.io/gh/pip-date/pip-date
+[13]: https://codecov.io/gh/E3V3A/pip-date/branch/master/graph/badge.svg?token=wHBDKVmtPk
+[14]: https://codecov.io/gh/pip-date/pip-date
 
 [21]: https://img.shields.io/github/license/E3V3A/pip-date.svg
 [22]: https://github.com/E3V3A/pip-date/blob/master/LICENSE.txt
