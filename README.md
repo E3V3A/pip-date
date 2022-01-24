@@ -166,12 +166,14 @@ pip-date      # When it's in your PATH
 It's quite amusing to see how different OS's and File System's (FS) are handling file time stamps.
 In the Linux world the available time stamps are called [atime](), [ctime]() and [mtime](), where 
 they are generally available through the *`stat`* command. However, Windows systems doesn't have 
-this commmand because they are using a different way to *blah blah*... 
+this commmand because NTFS is using a different way to keep track of time-stamps, so older python
+versions would (and Windows OS) would report the wrong values for these. But have since been fixed.
 
-To summarize the issue of finding the *`"last modification time"`* (*mtime*) when using Python on a 
-Windows architechture, we need to use *`ctime`* instead. Thus we use `platform.architecture()` to 
-check the machine's *(bits, linkage)* tuple for the "WindowsPE" string, and blatantly assuming
-that it has a Windows FS that need *ctime*, and that anything else should use *mtime*. 
+<!-- To summarize the issue of finding the *`"last modification time"`* (*mtime*) when using Python on a 
+Windows architechture, ~~we need to use *`ctime`* instead.~~ (**Has been fixed!**) Thus we use 
+`platform.architecture()` to check the machine's *(bits, linkage)* tuple for the "WindowsPE" string, 
+and blatantly assuming that it has a Windows FS that need *ctime*, and that anything else should 
+use *mtime*. -->
 
 Then we use: `os.path.getctime(pkg_loc)` to get the file time stamp.
 
