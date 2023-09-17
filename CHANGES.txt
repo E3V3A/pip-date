@@ -1,4 +1,4 @@
-v1.0.5, 2022-01-23 -- New Release and bug fixes:
+v1.0.5, 2022-01-23 -- New Release and bug fixes:modification date 
 
 * Added `*.py` extension to all script files for Windows compatibility
   (Fixes #12 and #22)
